@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<TcEventSources Version="2">
+	<Source>
+		<GUID>{53984316-BF60-4C28-8DED-3ECE762FB218}</GUID>
+		<Name LcId="1033">Trace Log</Name>
+		<Event>
+			<Id>1</Id>
+			<Message LcId="1033">{0}|{1}|{2}|{3}|{4}|{5}</Message>
+			<Detail>
+				<Name>Comment</Name>
+				<Text LcId="1033">Arguments:
+0 - Textual message
+1 - DC Timestamp
+2 - Instance (FB name)
+3 - Context (Calling task)
+4 - ScanCount
+5 - Flags</Text>
+			</Detail>
+		</Event>
+	</Source>
+</TcEventSources>

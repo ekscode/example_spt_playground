@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <Itf Name="I_Drive_AX5000" Id="{7a144353-44d3-483e-b59e-67643558209a}">
+    <Declaration><![CDATA[INTERFACE I_Drive_AX5000
+]]></Declaration>
+    <Method Name="DriveReset" Id="{bd897b02-233d-46c1-9be0-cc26f0f86b28}">
+      <Declaration><![CDATA[METHOD DriveReset : BOOL
+VAR_INPUT
+END_VAR
+]]></Declaration>
+    </Method>
+    <Property Name="REF_Axis" Id="{33062a85-b564-4044-a444-1072040d6d4c}">
+      <Declaration><![CDATA[PROPERTY REF_Axis : REFERENCE TO AXIS_REF]]></Declaration>
+      <Get Name="Get" Id="{2e8d1bcf-6f47-4a24-80c0-6dd306c6527f}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+      <Set Name="Set" Id="{3c24ff3d-6146-43cf-a7da-c33ab64a338b}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Set>
+    </Property>
+    <Property Name="SercosErrorID" Id="{fe32639d-486c-42a7-b035-c6ea67b0a239}">
+      <Declaration><![CDATA[PROPERTY SercosErrorID : UINT]]></Declaration>
+      <Get Name="Get" Id="{e4600d9f-0e53-40d8-a927-6c366a777ed5}">
+        <Declaration><![CDATA[]]></Declaration>
+      </Get>
+    </Property>
+  </Itf>
+</TcPlcObject>

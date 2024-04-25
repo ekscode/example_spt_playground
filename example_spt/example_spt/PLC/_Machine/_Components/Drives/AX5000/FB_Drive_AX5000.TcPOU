@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TcPlcObject Version="1.1.0.1" ProductVersion="3.1.4024.12">
+  <POU Name="FB_Drive_AX5000" Id="{753d2ad4-0317-4039-aaaf-2342ef9391ce}" SpecialFunc="None">
+    <Declaration><![CDATA[(*	Sample Code Disclaimer
+	All sample code provided by Beckhoff Automation LLC are for illustrative purposes only
+	and are provided “as is” and without any warranties, express or implied.
+	Actual implementations in applications will vary significantly.
+	Beckhoff Automation LLC shall have no liability for, and does not waive any rights in relation to,
+	any code samples that it provides or the use of such code samples for any purpose.
+*)
+FUNCTION_BLOCK FB_Drive_AX5000 EXTENDS FB_ComponentBase IMPLEMENTS I_Drive_AX5000
+VAR
+	// Properties
+	_SercosErrorID: UINT;
+	// References
+	refAxis: REFERENCE TO AXIS_REF;
+	
+	// Method Requests
+	DriveResetReq: BOOL;
+	
+	// General
+	fbSoEReset: FB_SoEReset;
+	
+	
+	
+	{attribute 'hide'}
+	DummyAxis	  : AXIS_REF;
+	_ErrorSercoID: INT;
+END_VAR
+]]></Declaration>
+    <Implementation>
+      <ST><![CDATA[]]></ST>
+    </Implementation>
+    <Folder Name="BaseComponent" Id="{e6390556-2426-4c18-8267-15aa8a2a601c}" />
+    <Method Name="CyclicLogic" Id="{c06a9a03-f364-4b21-96d1-4959359d2b5a}" FolderPath="BaseComponent\">
+      <Declaration><![CDATA[METHOD CyclicLogic : BOOL
+VAR_INPUT
+END_VAR
+
+VAR
+	_ErrorSercoID: UINT;
+END_VAR]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Call Super
+SUPER^.CyclicLogic();
+
+// Drive Reset Request
+IF DriveResetReq THEN
+	fbSoEReset.Execute := TRUE;
+	DriveResetReq := FALSE;
+ELSE
+	fbSoEReset.Execute := FALSE;
+END_IF
+
+// Call AX5000 SERCOS Reset
+fbSoEReset(Axis:= refAxis);
+
+// Busy Logic
+IF NOT fbSoEReset.Busy THEN
+	_Busy := FALSE;
+END_IF
+
+// Error Logic
+IF fbSoEReset.Error THEN
+	_Busy := FALSE;
+	_Error := TRUE;
+	_ErrorID := fbSoEReset.AdsErrId;
+	_SercosErrorID := fbSoEReset.SercosErrId;
+END_IF]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="DriveReset" Id="{d5c0017f-0242-4a80-9944-b64b963b97c3}">
+      <Declaration><![CDATA[METHOD DriveReset : BOOL
+]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[// Call Super
+SUPER^.Reset();
+
+IF NOT __ISVALIDREF(refAxis) OR _Busy THEN
+    RETURN;
+END_IF
+
+_Busy        := TRUE;
+_Error       := FALSE;
+_ErrorID     := 0;
+_SercosErrorID := 0;
+DriveResetReq := TRUE;
+
+DriveReset := TRUE;]]></ST>
+      </Implementation>
+    </Method>
+    <Method Name="Initialize" Id="{45f5b00b-210f-4397-bbaa-379d19c5f3ce}" FolderPath="BaseComponent\">
+      <Declaration><![CDATA[//! @summary Basic component initialization logic
+METHOD PROTECTED Initialize : BOOL;
+
+//! @description This method is called by <c>CyclicLogic()</c> as required]]></Declaration>
+      <Implementation>
+        <ST><![CDATA[refAxis REF= DummyAxis;
+
+fbSoEReset.Execute := FALSE;
+
+Initialize := SUPER^.Initialize();
+]]></ST>
+      </Implementation>
+    </Method>
+    <Property Name="REF_Axis" Id="{18b34b49-6146-4624-8860-1c2da4f36b41}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY REF_Axis : REFERENCE TO AXIS_REF
+]]></Declaration>
+      <Get Name="Get" Id="{998e4c27-d3bb-4835-ba5d-43d681e13047}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[REF_Axis REF= refAxis;
+]]></ST>
+        </Implementation>
+      </Get>
+      <Set Name="Set" Id="{3d5a81e5-9fce-46b5-8b62-4501391fc32d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[refAxis REF= REF_Axis;
+]]></ST>
+        </Implementation>
+      </Set>
+    </Property>
+    <Property Name="SercosErrorID" Id="{d9861e40-539f-4899-95f4-fcea5cc4fdc9}">
+      <Declaration><![CDATA[{warning 'add property implementation'}
+PROPERTY SercosErrorID : UINT
+]]></Declaration>
+      <Get Name="Get" Id="{3c839203-23b7-422a-806e-6c1eb118b39d}">
+        <Declaration><![CDATA[VAR
+END_VAR
+]]></Declaration>
+        <Implementation>
+          <ST><![CDATA[SercosErrorID := _SercosErrorID;]]></ST>
+        </Implementation>
+      </Get>
+    </Property>
+    <LineIds Name="FB_Drive_AX5000">
+      <LineId Id="9" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_AX5000.CyclicLogic">
+      <LineId Id="16" Count="0" />
+      <LineId Id="15" Count="0" />
+      <LineId Id="39" Count="0" />
+      <LineId Id="18" Count="0" />
+      <LineId Id="17" Count="0" />
+      <LineId Id="19" Count="0" />
+      <LineId Id="24" Count="0" />
+      <LineId Id="21" Count="1" />
+      <LineId Id="20" Count="0" />
+      <LineId Id="23" Count="0" />
+      <LineId Id="14" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="40" Count="0" />
+      <LineId Id="26" Count="0" />
+      <LineId Id="25" Count="0" />
+      <LineId Id="30" Count="1" />
+      <LineId Id="41" Count="0" />
+      <LineId Id="38" Count="0" />
+      <LineId Id="29" Count="0" />
+      <LineId Id="27" Count="0" />
+      <LineId Id="32" Count="2" />
+      <LineId Id="28" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_AX5000.DriveReset">
+      <LineId Id="19" Count="9" />
+      <LineId Id="31" Count="0" />
+      <LineId Id="29" Count="1" />
+      <LineId Id="4" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_AX5000.Initialize">
+      <LineId Id="5" Count="0" />
+      <LineId Id="7" Count="0" />
+      <LineId Id="6" Count="0" />
+      <LineId Id="9" Count="0" />
+      <LineId Id="8" Count="0" />
+      <LineId Id="10" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_AX5000.REF_Axis.Get">
+      <LineId Id="2" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_AX5000.REF_Axis.Set">
+      <LineId Id="2" Count="0" />
+      <LineId Id="5" Count="0" />
+    </LineIds>
+    <LineIds Name="FB_Drive_AX5000.SercosErrorID.Get">
+      <LineId Id="2" Count="0" />
+    </LineIds>
+  </POU>
+</TcPlcObject>
